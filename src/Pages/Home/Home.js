@@ -4,6 +4,7 @@ import Banner2 from './Banner2';
 import Info from './Info';
 import MakeAppointment from './MakeAppointment';
 import Services from './Services';
+import Testimonials from './Testimonials';
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
         <Services></Services>
         <Banner2></Banner2>
         <MakeAppointment></MakeAppointment>
+        <Testimonials></Testimonials>
     </div>
   )
 }
