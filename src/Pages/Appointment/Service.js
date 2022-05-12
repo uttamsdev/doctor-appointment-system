@@ -6,8 +6,8 @@ const Service = ({ service, setTreatment }) => {
   //card from daisyui
   return (
     <div class="card lg:max-w-lg bg-base-100 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title text-secondary">{name}</h2>
+      <div class="card-body text-center">
+        <h2 class="text-xl font-bold text-center text-secondary">{name}</h2>
         <p>
           {slots.length > 0 ? (
             <span>{slots[0]}</span>
@@ -24,7 +24,7 @@ const Service = ({ service, setTreatment }) => {
             class=""
             onClick={() => setTreatment(service)}
             for="booking-modal"
-            className="btn btn-secondary text-white uppercase"
+            className="btn btn-secondary btn-sm text-white uppercase bg-gradient-to-r from-secondary to-primary"
           >
             Book Appointment
           </label>
