@@ -1,33 +1,37 @@
 import React, { useEffect } from "react";
 import auth from "../../firebase.init";
-import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
+  let signInError;
   useEffect(() => {
     if (user) {
       console.log(user);
     }
   }, [user]);
 
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error.message}</p>
-      </div>
-    );
+  if (error || gError) {
+    signInError = <p className="text-red-500">{error?.message || gError?.message}</p>
   }
-  if (loading) {
-    return <p>Loading...</p>;
+  if (loading || gLoading) {
+    return <button class="btn loading">loading</button>;
   }
   const onSubmit = (data) => {
+    signInWithEmailAndPassword(data.email, data.password);
     console.log(data);
   };
 
@@ -88,8 +92,8 @@ const Login = () => {
               {errors.password?.type === "minLength" && <span class="label-text-alt text-red-500">{errors.password.message}</span>}
                 
               </label>
+              {signInError}
             </div>
-
             <input className="btn w-full max-w-xs text-white" type="submit" value="Login" />
           </form>
           <div className="divider">OR</div>
