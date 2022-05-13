@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import auth from "../../firebase.init";
 import {
-  useSignInWithEmailAndPassword,
+    useCreateUserWithEmailAndPassword,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
@@ -10,8 +10,12 @@ import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const [
+    createUserWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useCreateUserWithEmailAndPassword(auth);
   const {
     register,
     formState: { errors },
@@ -34,7 +38,7 @@ const SignUp = () => {
     return <Loading></Loading>;
   }
   const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
+    createUserWithEmailAndPassword(data.email, data.password);
     console.log(data);
   };
   return (
