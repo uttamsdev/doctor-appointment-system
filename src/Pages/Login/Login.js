@@ -3,6 +3,7 @@ import auth from "../../firebase.init";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import Loading from "../Shared/Loading";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -44,7 +45,7 @@ const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="form-control w-full max-w-xs">
               <label class="label">
-                <span class="label-text">What is your name?</span>
+                <span class="label-text">Email</span>
               </label>
               <input
                 type="email"
@@ -97,6 +98,7 @@ const Login = () => {
             </div>
             <input className="btn w-full max-w-xs text-white" type="submit" value="Login" />
           </form>
+          <p><small>New to Doctors Portal? <Link className="text-primary" to="/signup">Create New Account</Link></small></p>
           <div className="divider">OR</div>
           <button
             onClick={() => signInWithGoogle()}
