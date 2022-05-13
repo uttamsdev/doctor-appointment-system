@@ -1,8 +1,11 @@
 import { format } from "date-fns";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
 
 const BookingModal = ({ date, treatment, setTreatment }) => {
   const { _id, name, slots } = treatment;
+  const [user] = useAuthState(auth);
 
   const handleBooking = (event) => {
     event.preventDefault();
@@ -16,7 +19,7 @@ const BookingModal = ({ date, treatment, setTreatment }) => {
       <div className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <label
-            for="booking-modal"
+            htmlFor="booking-modal"
             className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
@@ -32,26 +35,30 @@ const BookingModal = ({ date, treatment, setTreatment }) => {
               type="text"
               disabled
               value={format(date, "PP")}
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
             <select
               name="slot"
               className="select select-bordered w-full max-w-xs"
             >
-              {slots.map((slot) => (
-                <option value={slot}>{slot}</option>
+              {slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
               name="name"
               type="text"
-              placeholder="Your name"
+              disabled
               className="input input-bordered w-full max-w-xs"
+              value={user?.displayName || ""}
             />
             <input
               type="email"
-              placeholder="Your email"
+              disabled
               className="input input-bordered w-full max-w-xs"
+              value={user?.email || ""}
             />
             <input
               type="number"
