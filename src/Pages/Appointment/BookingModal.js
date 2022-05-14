@@ -1,17 +1,50 @@
 import { format } from "date-fns";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { toast } from "react-toastify";
 import auth from "../../firebase.init";
+
 
 const BookingModal = ({ date, treatment, setTreatment }) => {
   const { _id, name, slots } = treatment;
   const [user] = useAuthState(auth);
 
+  const formatedDate = format(date, "PP");
   const handleBooking = (event) => {
     event.preventDefault();
     const slot = event.target.slot.value;
     console.log(slot);
-    setTreatment(null); // to close modal setTreatment null
+    
+    const booking = {
+      treatmentId : _id,
+      treatment: name,
+      date: formatedDate,
+      slot,
+      patient: user.email,
+      patientName: user.displayName,
+      phone: event.target.phone.value
+
+    }
+
+    //insert booking data
+    fetch('http://localhost:5000/booking',{
+      method: 'POST',
+      headers: {
+        'content-type' : 'application/json'
+      },
+      body: JSON.stringify(booking)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      if(data.success){
+        toast(`Appointment is set , ${formatedDate} at ${slot}`);
+      }
+      else{
+        toast.error(`You already have an appointment on ${data.booking?.date} at ${data.booking?.slot}`);
+      }
+       setTreatment(null); // to close modal setTreatment null
+    })
   };
   return (
     <div>
@@ -64,6 +97,7 @@ const BookingModal = ({ date, treatment, setTreatment }) => {
               type="number"
               placeholder="Your phone"
               className="input input-bordered w-full max-w-xs"
+              name="phone"
             />
             <input
               type="submit"
