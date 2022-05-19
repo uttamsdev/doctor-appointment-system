@@ -27,6 +27,11 @@ const Navbar = () => {
         <Link to="/about">About</Link>
       </li>
       <li>
+        {
+          user && <Link to="/Dashboard">Dashboard</Link>
+        }
+      </li>
+      <li>
         {user ? <button onClick={logout} className="btn btn-ghost">Sign Out</button> : <Link to="/login">Login</Link>}
       </li>
     </>
