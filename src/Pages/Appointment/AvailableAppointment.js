@@ -12,7 +12,7 @@ const AvailableAppointment = ({date}) => {
 
     //using react query
     const {data: services, isLoading, refetch} = useQuery(['available', formatedDate], ()=> fetch(`http://localhost:5000/available?date=${formatedDate}`).then(res => res.json()))
-    //here availabe is a query name
+    //here availabe is a query name && formatedDate is dependacny here
     if(isLoading) {
       return <Loading></Loading>
     }
