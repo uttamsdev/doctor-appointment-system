@@ -10,27 +10,29 @@ const MyAppointment = () => {
   const [user] = useAuthState(auth);
   useEffect(() => {
     if (user) {
-        fetch(`http://localhost:5000/booking?patient=${user.email}`, {
-            method: 'GET',
-            headers: {
-                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
+      fetch(
+        `https://vast-everglades-33938.herokuapp.com/booking?patient=${user.email}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+        .then((res) => {
+          console.log("res", res);
+          if (res.status === 401 || res.status === 403) {
+            signOut(auth);
+            localStorage.removeItem("accessToken");
+            navigate("/");
+          }
+          return res.json();
         })
-            .then(res => {
-                console.log('res', res);
-                if (res.status === 401 || res.status === 403) {
-                    signOut(auth);
-                    localStorage.removeItem('accessToken');
-                    navigate('/');
-                }
-                return res.json()
-            })
-            .then(data => {
-
-                setAppointments(data);
-            });
+        .then((data) => {
+          setAppointments(data);
+        });
     }
-}, [user])
+  }, [user]);
   return (
     <div>
       <h2>My appointments {appointments.length}</h2>
@@ -46,15 +48,15 @@ const MyAppointment = () => {
             </tr>
           </thead>
           <tbody>
-            {
-                appointments.map((appointment, index) => <tr>
-                    <th>{index+1}</th>
-                    <td>{appointment.patientName}</td>
-                    <td>{appointment.date}</td>
-                    <td>{appointment.slot}</td>
-                    <td>{appointment.treatment}</td>
-                  </tr>)
-            }
+            {appointments.map((appointment, index) => (
+              <tr>
+                <th>{index + 1}</th>
+                <td>{appointment.patientName}</td>
+                <td>{appointment.date}</td>
+                <td>{appointment.slot}</td>
+                <td>{appointment.treatment}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
